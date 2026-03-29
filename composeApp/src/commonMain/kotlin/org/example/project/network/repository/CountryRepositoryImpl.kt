@@ -22,7 +22,7 @@ class CountryRepositoryImpl(private val apiService: KtorClientProvider): Country
           if (response.status.value == 200){
               val list = response.body() as List<CountryDetailsResponse>
               val countryDetailList = list.map { item -> item.toDomain() }
-              saveToCache(countryDetailList)
+              saveToCache(countryDetailList) //in memory cache
               NetworkResponse.Success(countryDetailList)
 
           }else if(response.status.value == 404){

@@ -3,6 +3,12 @@ package org.example.project.navigation
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
+/**
+ * TNavigation Coordintator
+ *
+ */
+
+
 sealed interface NavEvent{
     data class ToDetailScreen(
         val countryName: String

@@ -47,11 +47,9 @@ fun HomeScreen(viewModel: HomeViewModel){
     val state by viewModel.uiState.collectAsState()
     val event by viewModel.events.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
-    val topBarColor = Color(0xFF0DADB3) // Very light grey/white
-    val contentColor = Color(0xFF1A1C1E)
     val snackbarHostState =  remember { SnackbarHostState() }
 
-    LaunchedEffect(event) {
+    LaunchedEffect(event) { //SnackBar display listening to event
         event.let {
             when (it) {
                 is HomeViewModel.UiEvent.showToast -> {
@@ -122,6 +120,14 @@ fun HomeScreen(viewModel: HomeViewModel){
         }
     }
 }
+
+/**
+ * Composable function for CountryList
+ *
+ * @param modifier
+ * @param items
+ * @param viewModel
+ */
 
 @Composable
 fun CountryListView(modifier: Modifier = Modifier, items:List<CountryDetail>,viewModel: HomeViewModel){

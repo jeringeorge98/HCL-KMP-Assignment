@@ -21,7 +21,12 @@ import org.example.project.ui.DetailScreen
 import org.example.project.ui.HomeScreen
 import org.example.project.viewmodels.HomeVMFactory
 
-
+/**
+ * Application Navigation Controller with animation
+ *
+ * @param countryRepository
+ * @param navCoordinator
+ */
 @Composable
 fun AppNav(
     countryRepository: CountryRepository,
