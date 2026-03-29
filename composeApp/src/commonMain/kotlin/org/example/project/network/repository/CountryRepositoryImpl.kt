@@ -25,12 +25,15 @@ class CountryRepositoryImpl(private val apiService: KtorClientProvider): Country
               saveToCache(countryDetailList)
               NetworkResponse.Success(countryDetailList)
 
-          }else{
+          }else if(response.status.value == 404){
+              NetworkResponse.Error("The Search query returned no results.Check the query again or enter a different query!", code = 404)
+          }
+          else{
               NetworkResponse.Error("Response Failed with Error :${response.status.description}",response.status.value)
           }
               }
       }catch (e: IOException){
-          NetworkResponse.Error("Network Error : ${e.message}")
+          NetworkResponse.Error("No Network Error : Your device is not connected to Internet!")
       }
         catch (e: Exception){
             NetworkResponse.Error("Unknown Error : ${e.message}")

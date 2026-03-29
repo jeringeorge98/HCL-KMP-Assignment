@@ -14,6 +14,8 @@ class HomeViewModel(private val repository: CountryRepository,private val navCoo
 
     private var _uiState = MutableStateFlow<UiState>(UiState.Empty)
     val uiState = _uiState.asStateFlow()
+    private val _events = MutableStateFlow<UiEvent?>(null)
+    val events = _events.asStateFlow()
     sealed class UiState{
         object Loading: UiState()
         data class Success(val countries: List<CountryDetail>): UiState()
@@ -21,12 +23,19 @@ class HomeViewModel(private val repository: CountryRepository,private val navCoo
         object Empty: UiState()
 
     }
+    // for toast message
+    sealed class UiEvent{
+        data class showToast(val message: String): UiEvent()
+    }
     fun getCountryByName(countryName: String){
         viewModelScope.launch {
             _uiState.value = UiState.Loading
             val response = repository.getCountriesByName(countryName)
             when(response){
-                is NetworkResponse.Error<*> ->_uiState.value =  UiState.Error(response.message.toString())
+                is NetworkResponse.Error<*> ->{
+                    _uiState.value =  UiState.Error(response.message.toString())
+                    emitError(_uiState.value.toString())
+                }
                 is NetworkResponse.Loading ->_uiState.value = UiState.Loading
                 is NetworkResponse.Success ->_uiState.value = UiState.Success(response.data)
             }
@@ -35,5 +44,14 @@ class HomeViewModel(private val repository: CountryRepository,private val navCoo
     fun navigateToDetailScreen(countryName: String){
         navCoordinator.toDetailScreen(countryName)
     }
-
+    fun consumeEvent() {
+        _events.value = null
+    }
+    fun emitError(message: String){
+        viewModelScope.launch {
+            _events.emit(
+                UiEvent.showToast(message)
+            )
+        }
+    }
 }

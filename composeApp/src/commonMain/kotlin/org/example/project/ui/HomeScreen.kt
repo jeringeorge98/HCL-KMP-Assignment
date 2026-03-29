@@ -22,9 +22,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.example.project.domain.CountryDetail
 import org.example.project.viewmodels.HomeViewModel
 
@@ -41,9 +45,28 @@ import org.example.project.viewmodels.HomeViewModel
 @Composable
 fun HomeScreen(viewModel: HomeViewModel){
     val state by viewModel.uiState.collectAsState()
+    val event by viewModel.events.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
     val topBarColor = Color(0xFF0DADB3) // Very light grey/white
     val contentColor = Color(0xFF1A1C1E)
+    val snackbarHostState =  remember { SnackbarHostState() }
+
+    LaunchedEffect(event) {
+        event.let {
+            when (it) {
+                is HomeViewModel.UiEvent.showToast -> {
+                    launch {
+                        snackbarHostState.showSnackbar(it.message , withDismissAction = true)
+                    }
+
+                }
+                else -> {}
+            }
+
+        }
+        viewModel.consumeEvent() // makes event null
+    }
+
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(
@@ -59,7 +82,8 @@ fun HomeScreen(viewModel: HomeViewModel){
             windowInsets = WindowInsets.statusBars
 
         ) },
-        modifier = Modifier
+        modifier = Modifier,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {paddingValues ->
         Column(
             modifier = Modifier.fillMaxSize().padding(paddingValues).padding(8.dp),
@@ -82,7 +106,7 @@ fun HomeScreen(viewModel: HomeViewModel){
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                 when (state) {
-                    is HomeViewModel.UiState.Error -> ErrorView()
+                    is HomeViewModel.UiState.Error -> ErrorView((state as HomeViewModel.UiState.Error).message)
                     is HomeViewModel.UiState.Loading -> CircularProgressIndicator()
                     is HomeViewModel.UiState.Success -> CountryListView(
                         Modifier,
@@ -93,6 +117,7 @@ fun HomeScreen(viewModel: HomeViewModel){
                     is HomeViewModel.UiState.Empty -> {}
 
                 }
+
             }
         }
     }
@@ -126,8 +151,8 @@ fun CountryListView(modifier: Modifier = Modifier, items:List<CountryDetail>,vie
 }
 
 @Composable
-fun ErrorView(){
+fun ErrorView(messaage:String){
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        Text("Error Response Recieveid", color = MaterialTheme.colorScheme.error)
+        Text("Error :${messaage.toString()}", color = MaterialTheme.colorScheme.error)
     }
 }
