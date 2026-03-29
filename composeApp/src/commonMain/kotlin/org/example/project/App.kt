@@ -18,14 +18,12 @@ import org.jetbrains.compose.resources.painterResource
 
 import hclassignment.composeapp.generated.resources.Res
 import hclassignment.composeapp.generated.resources.compose_multiplatform
+import org.example.project.ui.Home
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        Column(
-            modifier = Modifier){
-
-        }
+        Home()
     }
 }
