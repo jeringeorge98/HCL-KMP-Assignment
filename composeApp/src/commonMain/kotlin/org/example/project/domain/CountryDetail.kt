@@ -5,7 +5,7 @@ import org.example.project.network.models.Currencies
 data class CountryDetail(
     val name: String,
     val officialName: String,
-    val capital: List<Double>?,
+    val capital: String?,
     val continent: String,
     val borders: List<String>?,
     val population: Int,
@@ -13,6 +13,7 @@ data class CountryDetail(
     val flag: String?,
     val languages: Map<String, String?>?,
     val currencies: Map<String, Currencies>?,
+    val coatOfArms: Map<String, String>?,
     val latlng: List<Double>,
     val capitalInfo: List<Double>? =null
 )

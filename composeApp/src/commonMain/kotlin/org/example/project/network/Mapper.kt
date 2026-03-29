@@ -8,7 +8,7 @@ fun CountryDetailsResponse.toDomain(): CountryDetail =
     CountryDetail(
         name = this.name.official,
         officialName = this.name.official,
-        capital = this.capitalInfo?.latlng,
+        capital = this.capital?.get(0).toString(),
         continent = this.continents.get(0),
         population = this.population,
         area = this.area,
@@ -18,4 +18,5 @@ fun CountryDetailsResponse.toDomain(): CountryDetail =
         languages = this.languages ,
         borders = this.borders,
         capitalInfo = this.capitalInfo?.latlng,
+        coatOfArms = this.coatOfArms
     )

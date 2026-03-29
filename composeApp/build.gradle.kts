@@ -50,6 +50,10 @@ kotlin {
 
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.navigation.compose)
+
+            //Coil
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.okhttp)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
