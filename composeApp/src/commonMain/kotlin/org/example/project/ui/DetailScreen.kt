@@ -12,6 +12,6 @@ fun DetailScreen(
 ) {
 
     Scaffold() {
-        Text("Detail Screen")
+        Text("Detail Screen with $countryName")
     }
 }

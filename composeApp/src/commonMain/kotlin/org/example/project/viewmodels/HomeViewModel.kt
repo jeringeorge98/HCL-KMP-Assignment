@@ -6,10 +6,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.example.project.domain.CountryDetail
+import org.example.project.navigation.NavCoordinator
 import org.example.project.network.NetworkResponse
 import org.example.project.network.repository.CountryRepository
 
-class HomeViewModel(private val repository: CountryRepository): ViewModel() {
+class HomeViewModel(private val repository: CountryRepository,private val navCoordinator: NavCoordinator): ViewModel() {
 
     private var _uiState = MutableStateFlow<UiState>(UiState.Empty)
     val uiState = _uiState.asStateFlow()
@@ -30,6 +31,9 @@ class HomeViewModel(private val repository: CountryRepository): ViewModel() {
                 is NetworkResponse.Success ->_uiState.value = UiState.Success(response.data)
             }
         }
+    }
+    fun navigateToDetailScreen(countryName: String){
+        navCoordinator.toDetailScreen(countryName)
     }
 
 }

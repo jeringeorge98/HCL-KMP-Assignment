@@ -11,7 +11,8 @@ class HomeVMFactory(private val repository: CountryRepository,private val navCoo
 
     override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
         return HomeViewModel(
-            repository = repository
+            repository = repository,
+            navCoordinator = navCoordinator
         ) as T
     }
 }

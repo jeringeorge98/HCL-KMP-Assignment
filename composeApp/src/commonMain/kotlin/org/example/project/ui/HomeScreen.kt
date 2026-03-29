@@ -86,7 +86,8 @@ fun HomeScreen(viewModel: HomeViewModel){
                     is HomeViewModel.UiState.Loading -> CircularProgressIndicator()
                     is HomeViewModel.UiState.Success -> CountryListView(
                         Modifier,
-                        (state as HomeViewModel.UiState.Success).countries
+                        (state as HomeViewModel.UiState.Success).countries,
+                        viewModel
                     )
 
                     is HomeViewModel.UiState.Empty -> {}
@@ -98,7 +99,7 @@ fun HomeScreen(viewModel: HomeViewModel){
 }
 
 @Composable
-fun CountryListView(modifier: Modifier = Modifier, items:List<CountryDetail>){
+fun CountryListView(modifier: Modifier = Modifier, items:List<CountryDetail>,viewModel: HomeViewModel){
     if(items.isEmpty()){
         Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center){
             Text("No results found")
@@ -112,7 +113,7 @@ fun CountryListView(modifier: Modifier = Modifier, items:List<CountryDetail>){
            items(items){country ->
                Card(
                    modifier= modifier.fillMaxWidth(),
-                   onClick = {}
+                   onClick = {viewModel.navigateToDetailScreen(country.officialName)}
                ){
                    Text(
                        text = country.officialName,
