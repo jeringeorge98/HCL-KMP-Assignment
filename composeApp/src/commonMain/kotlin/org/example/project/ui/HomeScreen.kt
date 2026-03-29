@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -23,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,13 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.example.project.domain.CountryDetail
-import org.example.project.network.KtorClientProvider
-import org.example.project.network.repository.CountryRepositoryImpl
 import org.example.project.viewmodels.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(viewModel: HomeViewModel){
+fun HomeScreen(viewModel: HomeViewModel){
     val state by viewModel.uiState.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
     val topBarColor = Color(0xFF0DADB3) // Very light grey/white
@@ -80,15 +79,20 @@ fun Home(viewModel: HomeViewModel){
                     Text("Search")
                 }
             }
-            Spacer(modifier = Modifier.width(16.dp))
-            when(state){
-                is HomeViewModel.UiState.Error -> Text((state as HomeViewModel.UiState.Error).message)
-                is HomeViewModel.UiState.Loading -> CircularProgressIndicator()
-                is HomeViewModel.UiState.Success -> CountryListView(Modifier,(state as HomeViewModel.UiState.Success).countries)
-                is HomeViewModel.UiState.Empty -> {}
+            Spacer(modifier = Modifier.height(16.dp))
+            Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                when (state) {
+                    is HomeViewModel.UiState.Error -> ErrorView()
+                    is HomeViewModel.UiState.Loading -> CircularProgressIndicator()
+                    is HomeViewModel.UiState.Success -> CountryListView(
+                        Modifier,
+                        (state as HomeViewModel.UiState.Success).countries
+                    )
 
+                    is HomeViewModel.UiState.Empty -> {}
+
+                }
             }
-            CountryListView(modifier = Modifier, items = emptyList())
         }
     }
 }
@@ -105,16 +109,24 @@ fun CountryListView(modifier: Modifier = Modifier, items:List<CountryDetail>){
             modifier=modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ){
-           items(4){
+           items(items){country ->
                Card(
                    modifier= modifier.fillMaxWidth(),
                    onClick = {}
                ){
                    Text(
-                       text = "Country Nane"
+                       text = country.officialName,
+                       modifier= Modifier.padding(16.dp)
                    )
                }
            }
         }
     }
+}
+
+@Composable
+fun ErrorView(){
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        Text("Error Response Recieveid", color = MaterialTheme.colorScheme.error)
     }
+}
