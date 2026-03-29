@@ -59,10 +59,6 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            // MockK for mocking in common tests
-            implementation(libs.mockk)
-            implementation(libs.ktor.client.mock)
-            implementation(libs.kotlinx.coroutines.test)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
