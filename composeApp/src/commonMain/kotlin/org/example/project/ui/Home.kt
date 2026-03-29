@@ -1,6 +1,7 @@
 package org.example.project.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,18 +11,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,23 +33,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.example.project.domain.CountryDetail
 import org.example.project.network.KtorClientProvider
 import org.example.project.network.repository.CountryRepositoryImpl
+import org.example.project.viewmodels.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(){
-    val repository = CountryRepositoryImpl(KtorClientProvider)
+fun Home(viewModel: HomeViewModel){
+    val state by viewModel.uiState.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
-    LaunchedEffect(Unit){
-
-    repository.getCountriesByName("ind")
-
-    }
+    val topBarColor = Color(0xFF0DADB3) // Very light grey/white
+    val contentColor = Color(0xFF1A1C1E)
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(
-            title = {Text("Search for a Country") },
+            title = {Text("Search for a Country", style = MaterialTheme.typography.titleMedium) },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 titleContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -74,10 +76,45 @@ fun Home(){
                     label = {Text("Search")},
                 )
                 Spacer(modifier = Modifier.width(5.dp))
-                Button(onClick = {}){
+                Button(onClick = {viewModel.getCountryByName(searchQuery)}){
                     Text("Search")
                 }
             }
+            Spacer(modifier = Modifier.width(16.dp))
+            when(state){
+                is HomeViewModel.UiState.Error -> Text((state as HomeViewModel.UiState.Error).message)
+                is HomeViewModel.UiState.Loading -> CircularProgressIndicator()
+                is HomeViewModel.UiState.Success -> CountryListView(Modifier,(state as HomeViewModel.UiState.Success).countries)
+                is HomeViewModel.UiState.Empty -> {}
+
+            }
+            CountryListView(modifier = Modifier, items = emptyList())
         }
     }
 }
+
+@Composable
+fun CountryListView(modifier: Modifier = Modifier, items:List<CountryDetail>){
+    if(items.isEmpty()){
+        Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            Text("No results found")
+        }
+        }
+    else{
+        LazyColumn(
+            modifier=modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ){
+           items(4){
+               Card(
+                   modifier= modifier.fillMaxWidth(),
+                   onClick = {}
+               ){
+                   Text(
+                       text = "Country Nane"
+                   )
+               }
+           }
+        }
+    }
+    }

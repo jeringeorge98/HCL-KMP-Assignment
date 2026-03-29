@@ -14,16 +14,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.jetbrains.compose.resources.painterResource
 
 import hclassignment.composeapp.generated.resources.Res
 import hclassignment.composeapp.generated.resources.compose_multiplatform
+import org.example.project.network.KtorClientProvider
+import org.example.project.network.repository.CountryRepositoryImpl
 import org.example.project.ui.Home
+import org.example.project.viewmodels.HomeVMFactory
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        Home()
+        Home(
+            viewModel = viewModel(
+                factory = HomeVMFactory(
+                    repository = CountryRepositoryImpl(
+                        apiService = KtorClientProvider
+                    )
+                )
+            )
+        )
     }
 }
