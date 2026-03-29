@@ -54,3 +54,14 @@ The app follows the MVVM (Model-View-ViewModel) architectural pattern to ensure 
 
 *   **Home Screen:** Displays a scrollable list of all countries. It includes a search bar at the top, allowing users to filter countries by name. Tapping on a country in the list navigates to the detail screen.
 *   **Detail Screen:** Shows comprehensive information about a selected country, such as its capital, population, region, and currency.
+
+### Data Displayed from Country Detail Response
+
+The app displays the following key information from the `CountryDetail` response for each country:
+
+*   **Official Name:** The full official name of the country.
+*   **Capital:** The capital city of the country.
+*   **Population:** The total population of the country.
+*   **Region:** The geographical region to which the country belongs.
+*   **Currencies:** A list of currencies used in the country.
+*   **Languages:** A list of languages spoken in the country.
