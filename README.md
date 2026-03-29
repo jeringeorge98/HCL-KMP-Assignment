@@ -33,3 +33,24 @@ in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and r
 ---
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## App Description
+
+This application is a simple Country Information app built using Kotlin Multiplatform Mobile (KMM) and Compose Multiplatform. It allows users to browse a list of countries, search for specific countries, and view detailed information about each country.
+
+### Architecture
+
+The app follows the MVVM (Model-View-ViewModel) architectural pattern to ensure a clear separation of concerns, testability, and maintainability. It also utilizes the Repository pattern to abstract data sources and provide a clean API for data access.
+
+### Technologies Used
+
+*   **Kotlin Multiplatform Mobile (KMM):** For sharing code between Android and iOS.
+*   **Compose Multiplatform:** For building declarative UI across platforms.
+*   **Ktor Client:** For making network requests to fetch country data.
+*   **Kotlinx.serialization:** For efficient JSON serialization and deserialization.
+*   **Dependency Injection:** To manage dependencies and improve testability.
+
+### Screens
+
+*   **Home Screen:** Displays a scrollable list of all countries. It includes a search bar at the top, allowing users to filter countries by name. Tapping on a country in the list navigates to the detail screen.
+*   **Detail Screen:** Shows comprehensive information about a selected country, such as its capital, population, region, and currency.

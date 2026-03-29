@@ -53,10 +53,16 @@ kotlin {
 
             //Coil
             implementation(libs.coil.compose)
-            implementation(libs.coil.network.okhttp)
+//            implementation(libs.coil.network.okhttp)
+//            implementation(libs.coil.network.ktor)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            // MockK for mocking in common tests
+            implementation(libs.mockk)
+            implementation(libs.ktor.client.mock)
+            implementation(libs.kotlinx.coroutines.test)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -80,6 +86,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false

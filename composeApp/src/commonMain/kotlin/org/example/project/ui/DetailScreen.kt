@@ -138,25 +138,26 @@ fun CountryDetailView(detail: CountryDetail){
                 InfoRow("Currencies",detail.currencies?.values?.joinToString(", "){it.name.toString()}?:"N/A")
             }
         }
-        item {
-            DetailCard(
-                title = "Other Info"
-            ){
-               Row {
-                   Text("Coat of Arms:")
-                   Spacer(modifier = Modifier.width(5.dp))
-                   detail.coatOfArms.let { imageUrl ->
-                       AsyncImage(
-                           model = imageUrl?.get("png"),
-                           contentDescription = "Coat of Arms",
-                           modifier = Modifier.size(50.dp),
-                           contentScale = ContentScale.Fit,
-                           alignment = Alignment.Center,
-                       )
-                   }
-               }
-            }
-        }
+//        item {
+//            DetailCard(
+//                title = "Other Info"
+//            ){
+//               Row {
+//                   Text("Coat of Arms:")
+//                   Spacer(modifier = Modifier.width(5.dp))
+//                   detail.coatOfArms.let { imageUrl ->
+//                       AsyncImage(
+//                           model = imageUrl?.get("png"),
+//                           contentDescription = "Coat of Arms",
+//                           modifier = Modifier.size(50.dp),
+//                           contentScale = ContentScale.Fit,
+//                           alignment = Alignment.Center,
+//
+//                       )
+//                   }
+//               }
+//            }
+//        }
 
     }
 
